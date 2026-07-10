@@ -1,0 +1,126 @@
+<!-- src/app/pages/docente/cargaAcademica.component.html -->
+
+<div class="carga-academica-page">
+  <div class="page-header">
+    <div>
+      <h1>Solicitudes pendientes</h1>
+      <p>Revise y gestione las solicitudes de pago de honorarios.</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="tabla-solicitudes">
+      <thead>
+        <tr>
+          <th>RUT</th>
+          <th>Nombre</th>
+          <th>Curso</th>
+          <th>Monto</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="solicitud">
+          <td>{{ solicitud.rut }}</td>
+          <td>{{ solicitud.nombre }}</td>
+          <td>{{ solicitud.descripcion }}</td>
+          <td>{{ solicitud.monto | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+          <td>{{ solicitud.fecha }}</td>
+          <td>
+            <span class="badge-estado" [ngClass]="'estado-' + solicitud.estado">
+              {{ solicitud.estado }}
+            </span>
+          </td>
+        </tr>
+
+        <tr *ngIf="!solicitud">
+          <td colspan="6" class="sin-datos">No hay solicitudes registradas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="acciones-globales">
+    <button
+      type="button"
+      class="btn-aceptar"
+      (click)="aceptarSolicitud()"
+      [disabled]="!solicitud || solicitud.estado !== 'pendiente'"
+    >
+      Aceptar
+    </button>
+
+    <button
+      type="button"
+      class="btn-rechazar"
+      (click)="abrirModalRechazo()"
+      [disabled]="!solicitud || solicitud.estado !== 'pendiente'"
+    >
+      Rechazar
+    </button>
+  </div>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">
+    {{ mensajeExito }}
+  </div>
+</div>
+
+<!-- Modal de rechazo -->
+<div class="modal-overlay" *ngIf="modalRechazoAbierto" (click)="cancelarRechazo()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Motivo del rechazo</h3>
+      <button type="button" class="modal-close" (click)="cancelarRechazo()" title="Cerrar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-hint">
+        Indique el motivo por el cual se rechaza la solicitud de
+        <strong>{{ solicitud?.nombre }}</strong>.
+      </p>
+
+      <div class="form-group">
+        <label for="motivoRechazo">Motivo</label>
+        <textarea
+          id="motivoRechazo"
+          rows="4"
+          [(ngModel)]="motivoRechazo"
+          [ngModelOptions]="{standalone: true}"
+          placeholder="Escriba el motivo del rechazo..."
+          [class.input-error]="motivoInvalido"
+        ></textarea>
+
+        <small *ngIf="motivoInvalido" class="text-error">
+          El motivo es obligatorio.
+        </small>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="cancelarRechazo()"
+        [disabled]="enviandoRechazo"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="enviarRechazo()"
+        [disabled]="enviandoRechazo"
+      >
+        {{ enviandoRechazo ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </div>
+  </div>
+</div>

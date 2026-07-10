@@ -1,6 +1,6 @@
-/* src/app/pages/registro-docente/registro-docente.component.css */
+/* src/app/pages/funcionario/registroDocente.component.css */
 
-.registro-docente-page {
+.registroDocente-page {
   min-height: 100vh;
   padding: 32px;
   background: #f4f6f9;
@@ -363,7 +363,7 @@ button:disabled {
 }
 
 @media (max-width: 768px) {
-  .registro-docente-page {
+  .registroDocente-page {
     padding: 18px;
   }
 

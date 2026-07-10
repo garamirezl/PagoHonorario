@@ -1,20 +1,25 @@
 // src/app/app.routes.ts
 
 import { Routes } from '@angular/router';
-import { RegistroDocenteComponent } from './pages/docente/registroDocente.component';
+import { RegistroDocenteComponent } from './pages/funcionario/registroDocente.component';
+import { CargaAcademicaComponent } from './pages/docente/cargaAcademica.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'registro-docente',
+    redirectTo: 'registroDocente',
     pathMatch: 'full'
   },
   {
-    path: 'registro-docente',
+    path: 'registroDocente',
     component: RegistroDocenteComponent
   },
   {
+    path: 'cargaAcademica',
+    component: CargaAcademicaComponent
+  },
+  {
     path: '**',
-    redirectTo: 'registro-docente'
+    redirectTo: 'registroDocente'
   }
 ];

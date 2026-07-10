@@ -1,4 +1,4 @@
-// src/app/pages/registro-docente/registro-docente.component.ts
+// src/app/pages/funcionario/registroDocente.component.ts
 
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
@@ -16,7 +16,7 @@ import { DocenteService } from '../../services/docente.service';
 import { Docente } from '../../models/docente.model';
 
 @Component({
-  selector: 'app-registro-docente',
+  selector: 'app-registroDocente',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './registroDocente.component.html',
