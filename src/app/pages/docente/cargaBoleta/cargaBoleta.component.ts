@@ -22,7 +22,7 @@ export interface Boleta {
   templateUrl: './cargaBoleta.component.html',
   styleUrl: './cargaBoleta.component.css',
 })
-export class CargaDocumentoComponent {
+export class CargaBoletaComponent {
   boletas: Boleta[] = [
     {
       id: 1,
@@ -61,5 +61,53 @@ export class CargaDocumentoComponent {
     }
 
     const extensionesPermitidas = ['pdf'];
+    const extension = archivo.name.split('.').pop()?.toLowerCase() || '';
+
+    if (!extensionesPermitidas.includes(extension)) {
+      this.mostrarError('Formato no permitido. Usar PSF. JPG o PNG.');
+      input.value = '';
+      return;
+    }
+
+    const maxSizeMb = 5;
+    if (archivo.size > maxSizeMb * 1024 * 1024) {
+      this.mostrarError(`Archivo demasiado grande. Máximo ${maxSizeMb}MB.`);
+      input.value = '';
+      return;
+    }
+
+    boleta.archivo = archivo;
+    boleta.archivoNombre = archivo.name;
+    boleta.archivoCargado = false;
+
+    this.subirDocumento(boleta);
   }
-}
+
+  private subirDocumento(boleta: Boleta): void {
+    boleta.subiendo = true;
+
+    setTimeout(() => {
+      boleta.archivoCargado = true;
+      boleta.subiendo = false;
+      this.mostrarExito('Archivo subido exitosamente.');
+    }, 2000);
+  }
+
+  private mostrarExito(texto: string): void {
+    this.mensajeExito = texto;
+    this.mensajeError = '';
+
+      setTimeout(() => {
+        this.mensajeExito = '';
+      }, 3000);
+    }
+
+    private mostrarError(texto: string): void {
+      this.mensajeError = texto;
+      this.mensajeExito = '';
+
+      setTimeout(() => {
+        this.mensajeError = '';
+      }, 3000);
+    }
+  }
