@@ -2,7 +2,8 @@
 
 import { Routes } from '@angular/router';
 import { RegistroDocenteComponent } from './pages/funcionario/registroDocente.component';
-import { CargaAcademicaComponent } from './pages/docente/cargaAcademica.component';
+import { CargaAcademicaComponent } from './pages/docente/cargaAcademica/cargaAcademica.component';
+import { SignIn } from './pages/login/login.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,10 @@ export const routes: Routes = [
   {
     path: 'cargaAcademica',
     component: CargaAcademicaComponent
+  },
+  {
+    path: 'login',
+    component: SignIn
   },
   {
     path: '**',

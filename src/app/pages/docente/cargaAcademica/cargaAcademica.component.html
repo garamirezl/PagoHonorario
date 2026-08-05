@@ -1,0 +1,103 @@
+<!-- src/app/pages/docente/cargaAcademica.component.html -->
+
+<div class="carga-academica-page">
+  <div class="page-header">
+    <div>
+      <h1>Validación de Carga Académica</h1>
+      <p>Revise y gestione las solicitudes de pago de honorarios.</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="tabla-solicitudes">
+      <thead>
+        <tr>
+          <th>RUT</th>
+          <th>Nombre</th>
+          <th>Periodo Académico</th>
+          <th>Monto</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Desglose</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="solicitud">
+          <td>{{ solicitud.rut }}</td>
+          <td>{{ solicitud.nombre }}</td>
+          <td>{{ solicitud.descripcion }}</td>
+          <td>{{ solicitud.monto | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+          <td>{{ solicitud.fecha }}</td>
+          <td>
+            <span class="badge-estado" [ngClass]="'estado-' + solicitud.estado">
+              {{ solicitud.estado }}
+            </span>
+          </td>
+          <td>
+            <button type="button" class="btn-detalle" (click)="abrirModalDesglose()">Detalle</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!solicitud">
+          <td colspan="6" class="sin-datos">No hay solicitudes registradas.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+ <!-- Modal de Detalle Pago -->
+  <div class="modal-overlay" *ngIf="modalDesgloseAbierto" (click)="cerrarModalDesglose()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Detalle del Pago</h3>
+        <button type="button" class="modal-close" (click)="cerrarModalDesglose()" title="Cerrar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-hint">
+          Detalle del pago de honorarios de
+          <strong>{{ solicitud?.nombre }}</strong>.
+        </p>
+
+      <table class="tabla-desglose">
+        <thead>
+          <tr>
+            <th>Curso</th>
+            <th>Monto</th>
+            <th>Horas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of solicitud?.desglose">
+            <td>{{ item.curso }}</td>
+            <td>{{ item.monto }}</td>
+            <td>{{ item.horas }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td>{{ solicitud?.monto | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="form-group comentario-group">
+        <label for="comentario">Comentario:</label>
+        <textarea id="comentario" rows="3" [(ngModel)]="comentario" [ngModelOptions]="{standalone: true}" placeholder="Indique sus razones"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-rechazar-modal" (click)="rechazarSolicitud()" [disabled]="procesando">Rechazar</button>
+      <button class="btn-aceptar-modal" (click)="aceptarSolicitud()" [disabled]="procesando">{{ procesando ? 'Procesando...' : 'Aceptar' }}</button>
+    </div>
+  </div>
+</div>

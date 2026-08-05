@@ -1,0 +1,87 @@
+<!-- src/app/pages/docente/cargaDocumento.component.html -->
+
+<div class="carga-documento-page">
+  <div class="page-header">
+    <div>
+      <h1>Carga de Boleta</h1>
+      <p>Estimado Docente: Se solicitará de acuerdo al mes correspondiente, la carga de su boleta para Pago de Honorarios</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="tabla-registro-boleta">
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th>Valor bruto</th>
+          <th>Impuesto retenido</th>
+          <th>Total</th>
+          <th>Fecha límite de carga</th>
+          <th>Boleta</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let boleta of boletas">
+          <td>{{ boleta.periodoAcademico }}</td>
+          <td>{{ boleta.valorBruto | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+          <td>{{ boleta.impuestoRetenido | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+          <td class="celda-total">
+            {{ (boleta.valorBruto - boleta.impuestoRetenido) | currency:'CLP':'symbol-narrow':'1.0-0' }}
+          </td>
+          <td [class.fecha-vencida]="esFechaVencida(boleta.fechaLimite)">
+            {{ boleta.fechaLimite }}
+          </td>
+          <td>
+            <div class="documento-cell">
+              <input
+                type="file"
+                #inputArchivo
+                class="input-file-oculto"
+                (change)="onArchivoSeleccionado($event, boleta)"
+                accept=".pdf,.jpg,.jpeg,.png"
+              />
+
+              <button
+                type="button"
+                class="btn-icono-carga"
+                (click)="inputArchivo.click()"
+                [disabled]="boleta.subiendo || esFechaVencida(boleta.fechaLimite)"
+                [title]="esFechaVencida(boleta.fechaLimite) ? 'Fecha límite vencida' : (boleta.archivoNombre ? 'Cambiar archivo' : 'Adjuntar archivo')"
+              >
+                <svg *ngIf="!boleta.subiendo && !boleta.archivoCargado" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+
+                <svg *ngIf="boleta.archivoCargado && !boleta.subiendo" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2">
+                  <path d="M20 6L9 17l-5-5"></path>
+                </svg>
+
+                <span *ngIf="boleta.subiendo" class="spinner-small"></span>
+              </button>
+
+              <span class="archivo-nombre" *ngIf="boleta.archivoNombre" [title]="boleta.archivoNombre">
+                {{ boleta.archivoNombre }}
+              </span>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="boletas.length === 0">
+          <td colspan="6" class="sin-datos">No hay información disponible.</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">
+    {{ mensajeExito }}
+  </div>
+
+  <div *ngIf="mensajeError" class="alert alert-error">
+    {{ mensajeError }}
+  </div>
+</div>

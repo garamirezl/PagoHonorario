@@ -1,0 +1,176 @@
+/* src/app/pages/docente/cargaDocumento.component.css */
+
+.carga-documento-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #f4f6f9;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1f2937;
+}
+
+.page-header {
+  max-width: 1200px;
+  margin: 0 auto 24px auto;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.page-header p {
+  margin: 6px 0 0 0;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* ===== Tabla ===== */
+
+.table-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+  overflow-x: auto;
+}
+
+.tabla-registro-boleta {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-registro-boleta th,
+.tabla-registro-boleta td {
+  box-sizing: border-box;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.tabla-registro-boleta th {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-registro-boleta td {
+  border-bottom: 1px solid #f1f3f5;
+  color: #1f2937;
+}
+
+.tabla-registro-boleta tbody tr:hover {
+  background: #f9fafb;
+}
+
+.celda-total {
+  font-weight: 700;
+  color: #111827;
+}
+
+.fecha-vencida {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 32px !important;
+  color: #9ca3af;
+}
+
+/* ===== Columna de carga de archivo ===== */
+
+.documento-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-file-oculto {
+  display: none;
+}
+
+.btn-icono-carga {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid #2563eb;
+  background: #ffffff;
+  color: #2563eb;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.btn-icono-carga:hover:not(:disabled) {
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.btn-icono-carga:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+  color: #9ca3af;
+}
+
+.archivo-nombre {
+  font-size: 13px;
+  color: #374151;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #d1d5db;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Alert ===== */
+
+.alert {
+  max-width: 1200px;
+  margin: 18px auto 0 auto;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.alert-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 768px) {
+  .carga-documento-page {
+    padding: 18px;
+  }
+}

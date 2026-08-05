@@ -1,3 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap") layer(base);
 @import 'tailwindcss';
+@import "@ubo/ui-shared/theme.css";
+
+@source "../node_modules/@ubo/ui-shared";

@@ -20,9 +20,11 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              { "glob": "**/*", "input": "public" },
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "node_modules/@ubo/ui-shared/src/assets",
+                "output": "/assets/"
               }
             ],
             "styles": [
