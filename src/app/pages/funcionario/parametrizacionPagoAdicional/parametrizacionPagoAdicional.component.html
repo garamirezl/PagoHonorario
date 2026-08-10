@@ -1,0 +1,122 @@
+<!-- src/app/pages/parametrizacionPagoAdicional/parametrizacionPagoAdicional.component.html -->
+
+<div class="parametrizacion-page">
+  <div class="page-header">
+    <div>
+      <h1>Parametrización de Pago Adicional</h1>
+      <p>Configure los pagos adicionales según período académico y categoría.</p>
+    </div>
+  </div>
+
+  <div class="filtro-card">
+    <div class="filtro-fila">
+      <div class="form-group">
+        <label for="periodoAcademico">Período académico</label>
+        <select
+          id="periodoAcademico"
+          [(ngModel)]="periodoSeleccionado"
+          [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="onPeriodoChange()"
+        >
+          <option value="">Seleccione un período</option>
+          <option *ngFor="let periodo of periodosAcademicos" [value]="periodo">
+            {{ periodo }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="periodoSeleccionado">
+        <label for="tipoPago">Categoría / tipo de pago adicional</label>
+        <select
+          id="tipoPago"
+          [(ngModel)]="tipoPagoSeleccionado"
+          [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="onTipoPagoChange()"
+        >
+          <option value="">Seleccione una categoría</option>
+          <option *ngFor="let tipo of tiposPagoAdicional" [value]="tipo">
+            {{ tipo }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card" *ngIf="tipoPagoSeleccionado">
+    <table class="tabla-pagos">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Concepto</th>
+          <th>Monto</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let fila of filas; let i = index">
+          <td class="celda-correlativo">{{ fila.correlativo }}</td>
+          <td>
+            <select [(ngModel)]="fila.concepto" [ngModelOptions]="{standalone: true}">
+              <option value="">Seleccione concepto</option>
+              <option *ngFor="let concepto of conceptos" [value]="concepto">
+                {{ concepto }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input
+              type="number"
+              min="0"
+              [(ngModel)]="fila.monto"
+              [ngModelOptions]="{standalone: true}"
+              placeholder="Ej: 50000"
+            />
+          </td>
+          <td class="celda-accion">
+            <button
+              type="button"
+              class="btn-eliminar-fila"
+              (click)="eliminarFila(i)"
+              title="Eliminar registro"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="filas.length === 0">
+          <td colspan="4" class="sin-datos">
+            No hay pagos registrados para esta categoría. Agregue un registro.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="acciones-tabla">
+      <button type="button" class="btn-secondary" (click)="agregarFila()">
+        + Agregar registro
+      </button>
+
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="guardarPagos()"
+        [disabled]="guardando || filas.length === 0"
+      >
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">
+    {{ mensajeExito }}
+  </div>
+
+  <div *ngIf="mensajeError" class="alert alert-error">
+    {{ mensajeError }}
+  </div>
+</div>

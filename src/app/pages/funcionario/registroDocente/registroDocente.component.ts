@@ -12,8 +12,8 @@ import {
   Validators
 } from '@angular/forms';
 
-import { DocenteService } from '../../services/docente.service';
-import { Docente } from '../../models/docente.model';
+import { DocenteService } from '../../../services/docente.service';
+import { Docente } from '../../../models/docente.model';
 
 @Component({
   selector: 'app-registroDocente',

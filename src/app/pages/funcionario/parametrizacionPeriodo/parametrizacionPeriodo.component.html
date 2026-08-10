@@ -1,0 +1,113 @@
+<!-- src/app/pages/parametrizacionPeriodo/parametrizacionPeriodo.component.html -->
+
+<div class="parametrizacion-page">
+  <div class="page-header">
+    <div>
+      <h1>Parametrización de Periodo</h1>
+      <p>Configure los períodos de pago según el calendario académico.</p>
+    </div>
+  </div>
+
+  <div class="filtro-card">
+    <div class="form-group filtro-periodo">
+      <label for="periodoAcademico">Período académico</label>
+      <select
+        id="periodoAcademico"
+        [(ngModel)]="periodoSeleccionado"
+        [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="onPeriodoChange()"
+      >
+        <option value="">Seleccione un período</option>
+        <option *ngFor="let periodo of periodosAcademicos" [value]="periodo">
+          {{ periodo }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="tabla-parametrizacion">
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th>Inicio pago</th>
+          <th>Fin pago</th>
+          <th>Inicio intranet</th>
+          <th>Fin intranet</th>
+          <th>Fecha corte</th>
+          <th>Fecha boleta</th>
+          <th>N° de pago</th>
+          <th>Vigente</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let fila of filas">
+          <td>
+            <select [(ngModel)]="fila.mes" [ngModelOptions]="{standalone: true}">
+              <option value="">Seleccione</option>
+              <option *ngFor="let mes of meses" [value]="mes">{{ mes }}</option>
+            </select>
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.inicioPago" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.finPago" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.inicioIntranet" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.finIntranet" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.fechaCorte" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.fechaBoleta" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input
+              type="number"
+              min="1"
+              [(ngModel)]="fila.numeroPago"
+              [ngModelOptions]="{standalone: true}"
+              class="input-numero"
+            />
+          </td>
+          <td>
+            <select [(ngModel)]="fila.vigente" [ngModelOptions]="{standalone: true}">
+              <option [ngValue]="true">Sí</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr *ngIf="filas.length === 0">
+          <td colspan="9" class="sin-datos">
+            Seleccione un período académico para ver la parametrización.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="acciones-globales" *ngIf="filas.length > 0">
+    <button type="button" class="btn-secondary" (click)="agregarFila()">
+      + Agregar mes
+    </button>
+
+    <button type="button" class="btn-primary" (click)="guardarParametrizacion()" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">
+    {{ mensajeExito }}
+  </div>
+
+  <div *ngIf="mensajeError" class="alert alert-error">
+    {{ mensajeError }}
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+/* import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   AppLayoutComponent,
   NavSection,
@@ -43,15 +43,15 @@ export class SignIn {
           name: 'Carga Académica',
           icon:
             '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-          path: '/home',
+          path: '/cargaAcademica',
         },
         {
           name: 'Carga de Boleta',
           icon:
             '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-          path: '/home',
+          path: '/cargaBoleta',
         },
-        {
+       {
           name: 'Procesos',
           icon:
             '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 2M21 12a9 9 0 1 1-3.5-7.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -86,4 +86,18 @@ export class SignIn {
       ],
     },
   ];
+} */
+
+  // src/app/pages/login/login.component.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  templateUrl: './login.component.html',
+  /* styleUrl: './login.component.css' */
+})
+export class SignIn {
+  // Lógica de login (formulario, llamada a AuthService, etc.)
 }
