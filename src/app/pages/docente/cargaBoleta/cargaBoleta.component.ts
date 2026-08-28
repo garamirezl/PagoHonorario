@@ -29,7 +29,7 @@ export class CargaBoletaComponent {
       periodoAcademico: '2026 - Semestre 1',
       valorBruto: 500000,
       impuestoRetenido: 50000,
-      fechaLimite: '2026-08-15'
+      fechaLimite: '2026-08-20'
     },
     {
       id: 2,

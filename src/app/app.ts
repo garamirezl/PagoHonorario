@@ -1,19 +1,9 @@
-/* import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
-@Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-})
-export class App {
-  protected readonly title = signal('PagoHonorario');
-} */
-
-  // src/app/app.ts
+// src/app/app.ts
 
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 import {
   AppLayoutComponent,
   NavSection,
@@ -22,23 +12,37 @@ import {
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AppLayoutComponent],
+  imports: [RouterOutlet, AppLayoutComponent, CommonModule],
   templateUrl: './app.html',
 })
 export class App {
   protected readonly title = signal('PagoHonorario');
 
+  // true cuando estamos en /login (o cualquier ruta pública sin layout)
+  readonly mostrarLayout = signal(true);
+
+  private readonly rutasSinLayout = ['/login'];
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const url = (event as NavigationEnd).urlAfterRedirects;
+        this.mostrarLayout.set(!this.rutasSinLayout.includes(url));
+      });
+  }
+
   readonly mockUser: UserDropdownUser = {
-    nombre: 'María',
-    apellido_paterno: 'González',
-    email: 'maria.gonzalez@ubo.cl',
+    nombre: 'Gustavo',
+    apellido_paterno: 'Ramírez',
+    email: 'gustavo.ramirez@ubo.cl',
   };
 
   readonly navSections: NavSection[] = [
     {
       label: 'Menu',
       items: [
-         {
+        {
           name: 'Registro Docente',
           icon:
             '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',

@@ -1,7 +1,7 @@
-// src/app/pages/funcionario/registroDocente.component.ts
+// src/app/pages/funcionario/registroDocente/registroDocente.component.ts
 
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -12,13 +12,38 @@ import {
   Validators
 } from '@angular/forms';
 
+import {
+  ComponentCardComponent,
+  LabelComponent,
+  InputFieldComponent,
+  SelectComponent,
+  CheckboxComponent,
+  DatePickerComponent,
+  ButtonComponent,
+  ModalComponent,
+  AlertComponent,
+  Option
+} from '@ubo/ui-shared';
+
 import { DocenteService } from '../../../services/docente.service';
 import { Docente } from '../../../models/docente.model';
 
 @Component({
-  selector: 'app-registroDocente',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  selector: 'app-registro-docente',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ComponentCardComponent,
+    LabelComponent,
+    InputFieldComponent,
+    SelectComponent,
+    CheckboxComponent,
+    DatePickerComponent,
+    ButtonComponent,
+    ModalComponent,
+    AlertComponent
+  ],
   templateUrl: './registroDocente.component.html',
   styleUrl: './registroDocente.component.css'
 })
@@ -31,69 +56,44 @@ export class RegistroDocenteComponent {
   mensajeExito = '';
   mensajeError = '';
 
-  regiones = [
-    'Arica y Parinacota',
-    'Tarapacá',
-    'Antofagasta',
-    'Atacama',
-    'Coquimbo',
-    'Valparaíso',
-    'Metropolitana',
-    'O’Higgins',
-    'Maule',
-    'Ñuble',
-    'Biobío',
-    'La Araucanía',
-    'Los Ríos',
-    'Los Lagos',
-    'Aysén',
-    'Magallanes'
-  ];
+  // Modo edición: null = registro nuevo (POST), string = RUT en edición (PUT)
+  rutEnEdicion: string | null = null;
 
-  comunas = [
-    'Santiago',
-    'Providencia',
-    'Las Condes',
-    'Ñuñoa',
-    'Maipú',
-    'Puente Alto',
-    'La Florida',
-    'Valparaíso',
-    'Viña del Mar',
-    'Concepción'
-  ];
-
-  gradosAcademicos = [
-    'Licenciado',
-    'Magíster',
-    'Doctor',
-    'Postdoctorado',
-    'Sin grado académico'
-  ];
-
-  tiposContrato = [
-    'Planta',
-    'Contrata',
-    'Honorarios',
-    'Part-time',
-    'Reemplazo'
-  ];
-
-  jornadas = [
-    'Diurna',
-    'Vespertina',
-    'Ambas'
-  ];
-
-  // Toolbar
-  menuHerramientasAbierto = false;
-
-  // Modal buscador
-  modalBuscadorAbierto = false;
+  modalBuscadorAbierto = signal(false);
   rutBusqueda = '';
   buscando = false;
   mensajeBusqueda = '';
   docenteEncontrado = false;
+
+  sexoOptions: Option[] = [
+    { value: 'F', label: 'Femenino' },
+    { value: 'M', label: 'Masculino' },
+    { value: 'O', label: 'Otro' },
+    { value: 'N', label: 'Prefiere no informar' }
+  ];
+
+  regionOptions: Option[] = [
+    'Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo',
+    'Valparaíso', 'Metropolitana', "O'Higgins", 'Maule', 'Ñuble', 'Biobío',
+    'La Araucanía', 'Los Ríos', 'Los Lagos', 'Aysén', 'Magallanes'
+  ].map(r => ({ value: r, label: r }));
+
+  comunaOptions: Option[] = [
+    'Santiago', 'Providencia', 'Las Condes', 'Ñuñoa', 'Maipú',
+    'Puente Alto', 'La Florida', 'Valparaíso', 'Viña del Mar', 'Concepción'
+  ].map(c => ({ value: c, label: c }));
+
+  gradoAcademicoOptions: Option[] = [
+    'Licenciado', 'Magíster', 'Doctor', 'Postdoctorado', 'Sin grado académico'
+  ].map(g => ({ value: g, label: g }));
+
+  tipoContratoOptions: Option[] = [
+    'Planta', 'Contrata', 'Honorarios', 'Part-time', 'Reemplazo'
+  ].map(t => ({ value: t, label: t }));
+
+  jornadaOptions: Option[] = [
+    'Diurna', 'Vespertina', 'Ambas'
+  ].map(j => ({ value: j, label: j }));
 
   constructor(
     private fb: FormBuilder,
@@ -101,31 +101,32 @@ export class RegistroDocenteComponent {
   ) {
     this.formularioDocente = this.fb.group({
       rut: ['', [Validators.required, this.validarRutChileno]],
-
       nombres: ['', [Validators.required, Validators.minLength(2)]],
       apellido_paterno: ['', [Validators.required, Validators.minLength(2)]],
       apellido_materno: ['', [Validators.required, Validators.minLength(2)]],
-
       fecha_nacimiento: ['', Validators.required],
       sexo: ['', Validators.required],
-
       correo: ['', [Validators.required, Validators.email]],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9+ ]{8,15}$/)]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
-
       region: ['', Validators.required],
       comuna: ['', Validators.required],
-
       titulo_profesional: ['', [Validators.required, Validators.minLength(3)]],
       grado_academico: ['', Validators.required],
       especialidad: ['', [Validators.required, Validators.minLength(3)]],
-
       tipo_contrato: ['', Validators.required],
       jornada: ['', Validators.required],
       fecha_ingreso: ['', Validators.required],
-
       activo: [true]
     });
+  }
+
+  private formatearFechaDDMMYYYY(fecha: string | Date): string {
+    const d = new Date(fecha);
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const anio = d.getFullYear();
+    return `${dia}-${mes}-${anio}`;
   }
 
   guardarDocente(): void {
@@ -140,24 +141,31 @@ export class RegistroDocenteComponent {
 
     this.cargando = true;
 
-    const docente: Docente = this.formularioDocente.value;
+    const valoresFormulario = this.formularioDocente.value;
 
-    this.docenteService.registrarDocente(docente).subscribe({
-      next: (response) => {
-        console.log('Respuesta API:', response);
+    const docente: Docente = {
+      ...valoresFormulario,
+      fecha_nacimiento: this.formatearFechaDDMMYYYY(valoresFormulario.fecha_nacimiento),
+      fecha_ingreso: this.formatearFechaDDMMYYYY(valoresFormulario.fecha_ingreso)
+    };
 
-        this.mensajeExito = 'Docente registrado correctamente.';
+    // Si hay un RUT en edición, actualiza (PUT); si no, crea uno nuevo (POST).
+    const peticion$ = this.rutEnEdicion
+      ? this.docenteService.actualizarDocente(this.rutEnEdicion, docente)
+      : this.docenteService.registrarDocente(docente);
 
-        this.formularioDocente.reset({
-          activo: true
-        });
+    peticion$.subscribe({
+      next: () => {
+        this.mensajeExito = this.rutEnEdicion
+          ? 'Docente actualizado correctamente.'
+          : 'Docente registrado correctamente.';
 
+        this.formularioDocente.reset({ activo: true });
         this.enviado = false;
         this.cargando = false;
+        this.rutEnEdicion = null;
       },
       error: (error) => {
-        console.error('Error al registrar docente:', error);
-
         this.cargando = false;
 
         if (error.status === 422) {
@@ -165,43 +173,33 @@ export class RegistroDocenteComponent {
         } else if (error.status === 401) {
           this.mensajeError = 'No autorizado. Revise token o credenciales.';
         } else if (error.status === 404) {
-          this.mensajeError = 'No se encontró el endpoint de registro docente.';
+          this.mensajeError = 'No se encontró el endpoint correspondiente.';
         } else if (error.status === 500) {
           this.mensajeError = 'Error interno en la API.';
         } else if (error.status === 0) {
           this.mensajeError = 'No se pudo conectar con la API. Posible problema de CORS o servidor no disponible.';
         } else {
-          this.mensajeError = 'Ocurrió un error al registrar el docente.';
+          this.mensajeError = 'Ocurrió un error al guardar el docente.';
         }
       }
     });
   }
 
   limpiarFormulario(): void {
-    this.formularioDocente.reset({
-      activo: true
-    });
-
+    this.formularioDocente.reset({ activo: true });
     this.enviado = false;
     this.mensajeExito = '';
     this.mensajeError = '';
+    this.rutEnEdicion = null;
   }
 
   campoInvalido(nombreCampo: string): boolean {
     const campo = this.formularioDocente.get(nombreCampo);
-
-    return !!(
-      campo &&
-      campo.invalid &&
-      (campo.dirty || campo.touched || this.enviado)
-    );
+    return !!(campo && campo.invalid && (campo.dirty || campo.touched || this.enviado));
   }
 
   private validarRutChileno(control: AbstractControl): ValidationErrors | null {
-    const rut = String(control.value || '')
-      .replace(/\./g, '')
-      .replace(/-/g, '')
-      .toUpperCase();
+    const rut = String(control.value || '').replace(/\./g, '').replace(/-/g, '').toUpperCase();
 
     if (!rut || rut.length < 8) {
       return { rutInvalido: true };
@@ -223,47 +221,24 @@ export class RegistroDocenteComponent {
     }
 
     const dvEsperado = 11 - (suma % 11);
-
-    const dvCalculado =
-      dvEsperado === 11 ? '0' :
-      dvEsperado === 10 ? 'K' :
-      String(dvEsperado);
+    const dvCalculado = dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : String(dvEsperado);
 
     return dv === dvCalculado ? null : { rutInvalido: true };
   }
 
-  // ===== Toolbar =====
-
   abrirBuscador(): void {
-    this.modalBuscadorAbierto = true;
     this.rutBusqueda = '';
     this.mensajeBusqueda = '';
     this.docenteEncontrado = false;
+    this.modalBuscadorAbierto.set(true);
   }
 
   exportarDatos(): void {
     console.log('Exportar datos');
   }
 
-  imprimirFicha(): void {
-    this.menuHerramientasAbierto = false;
-    console.log('Imprimir ficha');
-  }
-
-  verHistorial(): void {
-    this.menuHerramientasAbierto = false;
-    console.log('Ver historial');
-  }
-
-  verConfiguracion(): void {
-    this.menuHerramientasAbierto = false;
-    console.log('Ver configuración');
-  }
-
-  // ===== Modal buscador =====
-
   cerrarBuscador(): void {
-    this.modalBuscadorAbierto = false;
+    this.modalBuscadorAbierto.set(false);
   }
 
   buscarDocentePorRut(): void {
@@ -278,23 +253,22 @@ export class RegistroDocenteComponent {
     this.docenteService.buscarPorRut(this.rutBusqueda).subscribe({
       next: (docente) => {
         this.formularioDocente.patchValue(docente);
-        this.mensajeBusqueda = 'Docente encontrado. Datos cargados.';
+
+        // Activa el modo edición: al guardar, se hará un PUT, no un POST.
+        this.rutEnEdicion = docente.rut;
+
+        this.mensajeBusqueda = 'Docente encontrado. Datos cargados para edición.';
         this.docenteEncontrado = true;
         this.buscando = false;
 
-        setTimeout(() => {
-          this.cerrarBuscador();
-        }, 800);
+        setTimeout(() => this.cerrarBuscador(), 800);
       },
       error: (error) => {
         this.buscando = false;
         this.docenteEncontrado = false;
-
-        if (error.status === 404) {
-          this.mensajeBusqueda = 'No se encontró un docente con ese RUT.';
-        } else {
-          this.mensajeBusqueda = 'Error al buscar el docente.';
-        }
+        this.mensajeBusqueda = error.status === 404
+          ? 'No se encontró un docente con ese RUT.'
+          : 'Error al buscar el docente.';
       }
     });
   }

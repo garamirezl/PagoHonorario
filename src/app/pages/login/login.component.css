@@ -1,0 +1,19 @@
+/* Agrega esto a tu login.component.css existente */
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.input-error {
+  border-color: #dc2626 !important;
+  background: #fff7f7;
+}

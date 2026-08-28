@@ -1,15 +1,21 @@
 <!-- src/app/app.html -->
 
-<app-layout
-  appName="Honorario Docente"
-  [navSections]="navSections"
-  [user]="mockUser"
-  profileRoute="/dashboard/profile"
-  redirectAfterLogout="/login"
-  [showThemeToggle]="true"
-  [showNotifications]="true"
->
-  <section class="mx-5 mt-2">
-    <router-outlet />
-  </section>
-</app-layout>
+<ng-container *ngIf="mostrarLayout(); else soloContenido">
+  <app-layout
+    appName="Portal Honorarios UBO"
+    [navSections]="navSections"
+    [user]="mockUser"
+    profileRoute="/dashboard/profile"
+    redirectAfterLogout="/login"
+    [showThemeToggle]="true"
+    [showNotifications]="true"
+  >
+    <section class="mx-5 mt-2">
+      <router-outlet />
+    </section>
+  </app-layout>
+</ng-container>
+
+<ng-template #soloContenido>
+  <router-outlet />
+</ng-template>

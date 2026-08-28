@@ -1,103 +1,101 @@
-<!-- src/app/pages/docente/cargaAcademica.component.html -->
+<!-- src/app/pages/docente/cargaAcademica/cargaAcademica.component.html -->
 
-<div class="carga-academica-page">
-  <div class="page-header">
-    <div>
-      <h1>Validación de Carga Académica</h1>
-      <p>Revise y gestione las solicitudes de pago de honorarios.</p>
+<app-component-card
+  title="Validación de Carga Académica"
+  desc="Revise y gestione las solicitudes de pago de honorarios."
+  [headerAction]="actionBtn"
+>
+  @if (loading()) {
+    <div class="flex flex-col items-center justify-center py-16 gap-3">
+      <svg class="h-8 w-8 animate-spin text-brand-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span class="text-sm text-gray-500 dark:text-gray-400">Cargando solicitudes…</span>
     </div>
-  </div>
+  } @else {
+    <app-basic-table-three
+      tableTitle="Solicitudes de honorarios"
+      [actionButtons]="actionButtons()"
+      [tableData]="postulantes()"
+      [columns]="columns()"
+      (actionClick)="onActionClick($event)"
+    />
+  }
+</app-component-card>
 
-  <div class="table-card">
-    <table class="tabla-solicitudes">
+@if (successMessage(); as msg) {
+  <div class="animate-fadeIn fixed bottom-8 right-5 w-72">
+    <app-alert variant="success" title="Éxito" [message]="msg" />
+  </div>
+}
+
+<ng-template #actionBtn>
+  <div class="flex items-center gap-2">
+    <app-button size="md" type="button" variant="outline" (btnClick)="refreshList()" [disabled]="loading()">
+      <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
+      <span>Refrescar</span>
+    </app-button>
+  </div>
+</ng-template>
+
+<app-modal
+  [isOpen]="modalDesgloseAbierto()"
+  (close)="cerrarModalDesglose()"
+  className="max-w-lg p-6"
+>
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Detalle del Pago</h3>
+    <p class="text-sm text-gray-600 dark:text-gray-400">
+      Detalle del pago de honorarios de
+      <strong>{{ solicitud()?.nombre }}</strong>.
+    </p>
+
+    <table class="w-full text-sm">
       <thead>
-        <tr>
-          <th>RUT</th>
-          <th>Nombre</th>
-          <th>Periodo Académico</th>
-          <th>Monto</th>
-          <th>Fecha</th>
-          <th>Estado</th>
-          <th>Desglose</th>
+        <tr class="text-left text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+          <th class="py-2">Curso</th>
+          <th class="py-2">Horas</th>
+          <th class="py-2">Monto</th>
         </tr>
       </thead>
-
       <tbody>
-        <tr *ngIf="solicitud">
-          <td>{{ solicitud.rut }}</td>
-          <td>{{ solicitud.nombre }}</td>
-          <td>{{ solicitud.descripcion }}</td>
-          <td>{{ solicitud.monto | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
-          <td>{{ solicitud.fecha }}</td>
-          <td>
-            <span class="badge-estado" [ngClass]="'estado-' + solicitud.estado">
-              {{ solicitud.estado }}
-            </span>
-          </td>
-          <td>
-            <button type="button" class="btn-detalle" (click)="abrirModalDesglose()">Detalle</button>
-          </td>
-        </tr>
-
-        <tr *ngIf="!solicitud">
-          <td colspan="6" class="sin-datos">No hay solicitudes registradas.</td>
-        </tr>
+        @for (item of solicitud()?.desglose; track item.curso) {
+          <tr class="border-b border-gray-100 dark:border-gray-800">
+            <td class="py-2 text-gray-800 dark:text-white/90">{{ item.curso }}</td>
+            <td class="py-2 text-gray-800 dark:text-white/90">{{ item.horas }}</td>
+            <td class="py-2 text-gray-800 dark:text-white/90">{{ formatearMonto(item.monto) }}</td>
+          </tr>
+        }
       </tbody>
+      <tfoot>
+        <tr class="border-t-2 border-gray-200 dark:border-gray-700 font-semibold">
+          <td class="py-2 text-gray-900 dark:text-white">Total</td>
+          <td></td>
+          <td class="py-2 text-gray-900 dark:text-white">{{ formatearMonto(totalDesglose()) }}</td>
+        </tr>
+      </tfoot>
     </table>
-  </div>
-</div>
 
- <!-- Modal de Detalle Pago -->
-  <div class="modal-overlay" *ngIf="modalDesgloseAbierto" (click)="cerrarModalDesglose()">
-    <div class="modal-box" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Detalle del Pago</h3>
-        <button type="button" class="modal-close" (click)="cerrarModalDesglose()" title="Cerrar">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <p class="modal-hint">
-          Detalle del pago de honorarios de
-          <strong>{{ solicitud?.nombre }}</strong>.
-        </p>
-
-      <table class="tabla-desglose">
-        <thead>
-          <tr>
-            <th>Curso</th>
-            <th>Monto</th>
-            <th>Horas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of solicitud?.desglose">
-            <td>{{ item.curso }}</td>
-            <td>{{ item.monto }}</td>
-            <td>{{ item.horas }}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Total</td>
-            <td>{{ solicitud?.monto | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
-          </tr>
-        </tfoot>
-      </table>
-
-      <div class="form-group comentario-group">
-        <label for="comentario">Comentario:</label>
-        <textarea id="comentario" rows="3" [(ngModel)]="comentario" [ngModelOptions]="{standalone: true}" placeholder="Indique sus razones"></textarea>
-      </div>
+    <div>
+      <app-label for="comentario">Comentario</app-label>
+      <app-text-area
+        id="comentario"
+        [rows]="3"
+        (valueChange)="comentario = $event"
+        placeholder="Indique sus razones"
+      />
     </div>
 
-    <div class="modal-actions">
-      <button class="btn-rechazar-modal" (click)="rechazarSolicitud()" [disabled]="procesando">Rechazar</button>
-      <button class="btn-aceptar-modal" (click)="aceptarSolicitud()" [disabled]="procesando">{{ procesando ? 'Procesando...' : 'Aceptar' }}</button>
+    <div class="flex justify-end gap-2 pt-2">
+      <app-button size="sm" type="button" variant="outline" [disabled]="procesando" (btnClick)="rechazarSolicitud()">
+        Rechazar
+      </app-button>
+      <app-button size="sm" type="button" [disabled]="procesando" (btnClick)="aceptarSolicitud()">
+        {{ procesando ? 'Procesando...' : 'Aceptar' }}
+      </app-button>
     </div>
   </div>
-</div>
+</app-modal>
