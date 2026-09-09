@@ -48,14 +48,6 @@ export class ParametrizacionPeriodoComponent {
       return;
     }
 
-    // Aquí luego se conecta al servicio real para cargar la parametrización existente:
-    // this.parametrizacionService.obtenerPorPeriodo(this.periodoSeleccionado)
-    //   .subscribe({
-    //     next: (data) => this.filas = data,
-    //     error: () => this.mostrarError('No se pudo cargar la parametrización.')
-    //   });
-
-    // Mientras no hay API conectada, se inicia con una fila vacía:
     this.filas = [this.filaVacia()];
   }
 
@@ -71,20 +63,6 @@ export class ParametrizacionPeriodoComponent {
 
     this.guardando = true;
 
-    // Aquí luego se conecta al servicio real:
-    // this.parametrizacionService.guardar(this.periodoSeleccionado, this.filas)
-    //   .subscribe({
-    //     next: () => {
-    //       this.guardando = false;
-    //       this.mostrarExito('Parametrización guardada correctamente.');
-    //     },
-    //     error: () => {
-    //       this.guardando = false;
-    //       this.mostrarError('Ocurrió un error al guardar la parametrización.');
-    //     }
-    //   });
-
-    // Simulación local mientras no hay API conectada:
     setTimeout(() => {
       this.guardando = false;
       this.mostrarExito('Parametrización guardada correctamente.');

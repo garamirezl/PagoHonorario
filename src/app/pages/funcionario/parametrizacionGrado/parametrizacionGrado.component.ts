@@ -44,10 +44,8 @@ export class ParametrizacionGradoComponent {
   mensajeExito = '';
   mensajeError = '';
 
-  // Toolbar
   menuHerramientasAbierto = false;
 
-  // Modal Grados
   modalGradosAbierto = false;
   nuevoGrado = '';
   nuevoGradoInvalido = false;
@@ -62,13 +60,6 @@ export class ParametrizacionGradoComponent {
       this.filas = [];
       return;
     }
-
-    // Aquí luego se conecta al servicio real para traer los valores ya cargados:
-    // this.parametrizacionService.obtenerValores(this.periodoSeleccionado, this.gradoSeleccionado)
-    //   .subscribe({
-    //     next: (data) => this.filas = data,
-    //     error: () => this.mostrarError('No se pudieron cargar los valores.')
-    //   });
 
     this.filas = [];
   }
@@ -87,20 +78,6 @@ export class ParametrizacionGradoComponent {
 
     this.guardando = true;
 
-    // Aquí luego se conecta al servicio real:
-    // this.parametrizacionService.guardarValores(this.periodoSeleccionado, this.gradoSeleccionado, this.filas)
-    //   .subscribe({
-    //     next: () => {
-    //       this.guardando = false;
-    //       this.mostrarExito('Valores guardados correctamente.');
-    //     },
-    //     error: () => {
-    //       this.guardando = false;
-    //       this.mostrarError('Ocurrió un error al guardar los valores.');
-    //     }
-    //   });
-
-    // Simulación local mientras no hay API conectada:
     setTimeout(() => {
       this.guardando = false;
       this.mostrarExito('Valores guardados correctamente.');
@@ -126,26 +103,6 @@ export class ParametrizacionGradoComponent {
 
     this.cargandoArchivo = true;
 
-    // Aquí luego se conecta al servicio real (subida de CSV/Excel):
-    //
-    // const formData = new FormData();
-    // formData.append('archivo', archivo);
-    // formData.append('periodo', this.periodoSeleccionado);
-    // formData.append('grado', this.gradoSeleccionado);
-    //
-    // this.parametrizacionService.cargarCsv(formData).subscribe({
-    //   next: (data) => {
-    //     this.filas = data;
-    //     this.cargandoArchivo = false;
-    //     this.mostrarExito('Archivo cargado correctamente.');
-    //   },
-    //   error: () => {
-    //     this.cargandoArchivo = false;
-    //     this.mostrarError('Ocurrió un error al cargar el archivo.');
-    //   }
-    // });
-
-    // Simulación local mientras no hay API conectada:
     setTimeout(() => {
       this.filas = [
         { carrera: 'Ingeniería Civil Informática', valor: 45000 },
@@ -159,16 +116,12 @@ export class ParametrizacionGradoComponent {
     input.value = '';
   }
 
-  // ===== Toolbar =====
-
   abrirModalGrados(): void {
     this.menuHerramientasAbierto = false;
     this.nuevoGrado = '';
     this.nuevoGradoInvalido = false;
     this.modalGradosAbierto = true;
   }
-
-  // ===== Modal Grados =====
 
   cerrarModalGrados(): void {
     this.modalGradosAbierto = false;
@@ -188,17 +141,6 @@ export class ParametrizacionGradoComponent {
       return;
     }
 
-    // Aquí luego se conecta al servicio real:
-    // this.gradoService.crear(nombre).subscribe({
-    //   next: () => {
-    //     this.grados.push(nombre);
-    //     this.nuevoGrado = '';
-    //     this.nuevoGradoInvalido = false;
-    //   },
-    //   error: () => this.mostrarError('No se pudo crear el grado.')
-    // });
-
-    // Simulación local mientras no hay API conectada:
     this.grados.push(nombre);
     this.nuevoGrado = '';
     this.nuevoGradoInvalido = false;
@@ -207,16 +149,8 @@ export class ParametrizacionGradoComponent {
   eliminarGrado(index: number): void {
     const grado = this.grados[index];
 
-    // Aquí luego se conecta al servicio real:
-    // this.gradoService.eliminar(grado).subscribe({
-    //   next: () => this.grados.splice(index, 1),
-    //   error: () => this.mostrarError('No se pudo eliminar el grado.')
-    // });
-
-    // Simulación local mientras no hay API conectada:
     this.grados.splice(index, 1);
 
-    // Si el grado eliminado era el seleccionado en el filtro principal, se limpia:
     if (this.gradoSeleccionado === grado) {
       this.gradoSeleccionado = '';
       this.filas = [];

@@ -61,17 +61,7 @@ export class ParametrizacionPagoAdicionalComponent {
       return;
     }
 
-    // Aquí luego se conecta al servicio real para traer los pagos ya registrados:
-    // this.pagoAdicionalService.obtenerPagos(this.periodoSeleccionado, this.tipoPagoSeleccionado)
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.filas = data;
-    //       this.siguienteCorrelativo = data.length
     //         ? Math.max(...data.map(f => f.correlativo)) + 1
-    //         : 1;
-    //     },
-    //     error: () => this.mostrarError('No se pudieron cargar los pagos.')
-    //   });
 
     this.filas = [];
     this.siguienteCorrelativo = 1;
@@ -101,20 +91,6 @@ export class ParametrizacionPagoAdicionalComponent {
 
     this.guardando = true;
 
-    // Aquí luego se conecta al servicio real:
-    // this.pagoAdicionalService.guardarPagos(this.periodoSeleccionado, this.tipoPagoSeleccionado, this.filas)
-    //   .subscribe({
-    //     next: () => {
-    //       this.guardando = false;
-    //       this.mostrarExito('Pagos adicionales guardados correctamente.');
-    //     },
-    //     error: () => {
-    //       this.guardando = false;
-    //       this.mostrarError('Ocurrió un error al guardar los pagos.');
-    //     }
-    //   });
-
-    // Simulación local mientras no hay API conectada:
     setTimeout(() => {
       this.guardando = false;
       this.mostrarExito('Pagos adicionales guardados correctamente.');

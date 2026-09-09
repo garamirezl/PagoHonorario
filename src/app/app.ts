@@ -67,6 +67,7 @@ export class App {
             { name: 'Periodos', path: '/parametrizacionPeriodo' },
             { name: 'Grados', path: '/parametrizacionGrado' },
             { name: 'Pagos Adicionales', path: '/parametrizacionPagoAdicional' },
+            { name: 'Global', path: '/parametrizacionGlobal' },
           ],
         },
       ],

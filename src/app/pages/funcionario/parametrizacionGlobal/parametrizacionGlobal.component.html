@@ -1,0 +1,85 @@
+<!-- src/app/pages/parametrizacionGlobal/parametrizacionGlobal.component.html -->
+
+<div class="parametrizacion-page">
+  <div class="page-header">
+    <div>
+      <h1>Parametrización Global</h1>
+      <p>Configure las fechas de los procesos según período académico.</p>
+    </div>
+  </div>
+
+  <div class="filtro-card">
+    <div class="filtro-fila">
+      <div class="form-group">
+        <label for="periodoAcademico">Período académico</label>
+        <select
+          id="periodoAcademico"
+          [(ngModel)]="periodoSeleccionado"
+          [ngModelOptions]="{standalone: true}"
+          (ngModelChange)="onPeriodoChange()"
+        >
+          <option value="">Seleccione un período</option>
+          <option *ngFor="let periodo of periodosAcademicos" [value]="periodo">
+            {{ periodo }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card" *ngIf="periodoSeleccionado">
+    <table class="tabla-valores">
+      <thead>
+        <tr>
+          <th>Proceso</th>
+          <th>Fecha inicio</th>
+          <th>Fecha fin</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let fila of filas">
+          <td>
+            <select [(ngModel)]="fila.proceso" [ngModelOptions]="{standalone: true}">
+              <option value="">Seleccione proceso</option>
+              <option *ngFor="let proceso of procesos" [value]="proceso">
+                {{ proceso }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.fechaInicio" [ngModelOptions]="{standalone: true}" />
+          </td>
+          <td>
+            <input type="date" [(ngModel)]="fila.fechaFin" [ngModelOptions]="{standalone: true}" />
+          </td>
+        </tr>
+
+        <tr *ngIf="filas.length === 0">
+          <td colspan="3" class="sin-datos">
+            No hay procesos configurados para este período. Agregue un registro.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="acciones-tabla">
+      <button type="button" class="btn-secondary" (click)="agregarFila()">
+        + Agregar registro
+      </button>
+
+      <button type="button" class="btn-primary" (click)="guardarParametrizacion()" [disabled]="guardando || filas.length === 0">
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">
+    {{ mensajeExito }}
+  </div>
+
+  <div *ngIf="mensajeError" class="alert alert-error">
+    {{ mensajeError }}
+  </div>
+
+</div>

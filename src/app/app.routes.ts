@@ -7,6 +7,7 @@ import { CargaBoletaComponent } from './pages/docente/cargaBoleta/cargaBoleta.co
 import { ParametrizacionPeriodoComponent } from './pages/funcionario/parametrizacionPeriodo/parametrizacionPeriodo.component';
 import { ParametrizacionGradoComponent } from './pages/funcionario/parametrizacionGrado/parametrizacionGrado.component';
 import { ParametrizacionPagoAdicionalComponent } from './pages/funcionario/parametrizacionPagoAdicional/parametrizacionPagoAdicional.component';
+import { ParametrizacionGlobalComponent } from './pages/funcionario/parametrizacionGlobal/parametrizacionGlobal.component';
 import { SignIn } from './pages/login/login.component';
 
 export const routes: Routes = [
@@ -38,6 +39,10 @@ export const routes: Routes = [
   {
     path: 'parametrizacionPagoAdicional',
     component: ParametrizacionPagoAdicionalComponent
+  },
+  {
+    path: 'parametrizacionGlobal',
+    component: ParametrizacionGlobalComponent
   },
   {
     path: 'login',
