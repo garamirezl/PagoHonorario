@@ -1,0 +1,16 @@
+<!-- src/app/pages/docente/curriculumDocente/curriculumDocente.component.html -->
+
+<app-component-card
+  title="Currículum Docente"
+  desc="Complete su información curricular por sección."
+>
+  <app-tabs [(activeTab)]="activeTab">
+    <app-tab-panel label="Perfil del Docente">
+      <app-perfil-docente />
+    </app-tab-panel>
+
+    <app-tab-panel label="Títulos y Grados">
+      <app-titulos-grados />
+    </app-tab-panel>
+  </app-tabs>
+</app-component-card>

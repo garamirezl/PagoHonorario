@@ -1,19 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+// src/app/models/persona.model.ts
 
-export interface Docente {
- rut: string;
- nombres: string;
- apellido_paterno: string;
- apellido_materno: string;
- fecha_nacimiento: string;
- sexo: string;
- correo_personal: string;
- telefono: number;
- direccion: string;
- region: string;
- comuna: string;
- fecha_ingreso: string;
- activo: boolean;
+export interface Persona {
+  perfil: string;
+  rut: string;
+  nombres: string;
+  apellido_paterno: string;
+  apellido_materno: string;
+  fecha_nacimiento: string;
+  sexo: string;
+  correo: string;
+  telefono: string;
+  direccion: string;
+  region: string;
+  comuna: string;
+  titulo_profesional: string;
+  grado_academico: string;
+  especialidad: string;
+  tipo_contrato: string;
+  jornada: string;
+  fecha_ingreso: string;
+  activo: boolean;
 }

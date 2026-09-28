@@ -1,4 +1,4 @@
-// src/app/pages/funcionario/registroDocente/registroDocente.component.ts
+// src/app/pages/funcionario/registroPersona/registroPersona.component.ts
 
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,11 +25,11 @@ import {
   Option
 } from '@ubo/ui-shared';
 
-import { DocenteService } from '../../../services/docente.service';
-import { Docente } from '../../../models/docente.model';
+import { PersonaService } from '../../../services/persona.service';
+import { Persona } from '../../../models/docente.model';
 
 @Component({
-  selector: 'app-registro-docente',
+  selector: 'app-registro-persona',
   imports: [
     CommonModule,
     FormsModule,
@@ -44,11 +44,11 @@ import { Docente } from '../../../models/docente.model';
     ModalComponent,
     AlertComponent
   ],
-  templateUrl: './registroDocente.component.html',
-  styleUrl: './registroDocente.component.css'
+  templateUrl: './registroPersona.component.html',
+  styleUrl: './registroPersona.component.css'
 })
-export class RegistroDocenteComponent {
-  formularioDocente: FormGroup;
+export class RegistroPersonaComponent {
+  formularioPersona: FormGroup;
 
   enviado = false;
   cargando = false;
@@ -56,14 +56,19 @@ export class RegistroDocenteComponent {
   mensajeExito = '';
   mensajeError = '';
 
-  // Modo edición: null = registro nuevo (POST), string = RUT en edición (PUT)
   rutEnEdicion: string | null = null;
 
   modalBuscadorAbierto = signal(false);
   rutBusqueda = '';
   buscando = false;
   mensajeBusqueda = '';
-  docenteEncontrado = false;
+  personaEncontrada = false;
+
+  perfilOptions: Option[] = [
+    { value: 'Docente', label: 'Docente' },
+    { value: 'Funcionario', label: 'Funcionario' },
+    { value: 'Director', label: 'Director' }
+  ];
 
   sexoOptions: Option[] = [
     { value: 'F', label: 'Femenino' },
@@ -97,9 +102,10 @@ export class RegistroDocenteComponent {
 
   constructor(
     private fb: FormBuilder,
-    private docenteService: DocenteService
+    private personaService: PersonaService
   ) {
-    this.formularioDocente = this.fb.group({
+    this.formularioPersona = this.fb.group({
+      perfil: ['', Validators.required],
       rut: ['', [Validators.required, this.validarRutChileno]],
       nombres: ['', [Validators.required, Validators.minLength(2)]],
       apellido_paterno: ['', [Validators.required, Validators.minLength(2)]],
@@ -129,21 +135,21 @@ export class RegistroDocenteComponent {
     return `${dia}-${mes}-${anio}`;
   }
 
-  guardarDocente(): void {
+  guardarPersona(): void {
     this.enviado = true;
     this.mensajeExito = '';
     this.mensajeError = '';
 
-    if (this.formularioDocente.invalid) {
-      this.formularioDocente.markAllAsTouched();
+    if (this.formularioPersona.invalid) {
+      this.formularioPersona.markAllAsTouched();
       return;
     }
 
     this.cargando = true;
 
-    const valoresFormulario = this.formularioDocente.value;
+    const valoresFormulario = this.formularioPersona.value;
 
-    const docente: Docente = {
+    const persona: Persona = {
       ...valoresFormulario,
       fecha_nacimiento: this.formatearFechaDDMMYYYY(valoresFormulario.fecha_nacimiento),
       fecha_ingreso: this.formatearFechaDDMMYYYY(valoresFormulario.fecha_ingreso)
@@ -151,21 +157,21 @@ export class RegistroDocenteComponent {
 
     // Si hay un RUT en edición, actualiza (PUT); si no, crea uno nuevo (POST).
     const peticion$ = this.rutEnEdicion
-      ? this.docenteService.actualizarDocente(this.rutEnEdicion, docente)
-      : this.docenteService.registrarDocente(docente);
+      ? this.personaService.actualizarPersona(this.rutEnEdicion, persona)
+      : this.personaService.registrarPersona(persona);
 
     peticion$.subscribe({
       next: () => {
         this.mensajeExito = this.rutEnEdicion
-          ? 'Docente actualizado correctamente.'
-          : 'Docente registrado correctamente.';
+          ? 'Persona actualizada correctamente.'
+          : 'Persona registrada correctamente.';
 
-        this.formularioDocente.reset({ activo: true });
+        this.formularioPersona.reset({ activo: true });
         this.enviado = false;
         this.cargando = false;
         this.rutEnEdicion = null;
       },
-      error: (error) => {
+      error: (error: any) => {
         this.cargando = false;
 
         if (error.status === 422) {
@@ -179,14 +185,14 @@ export class RegistroDocenteComponent {
         } else if (error.status === 0) {
           this.mensajeError = 'No se pudo conectar con la API. Posible problema de CORS o servidor no disponible.';
         } else {
-          this.mensajeError = 'Ocurrió un error al guardar el docente.';
+          this.mensajeError = 'Ocurrió un error al guardar la persona.';
         }
       }
     });
   }
 
   limpiarFormulario(): void {
-    this.formularioDocente.reset({ activo: true });
+    this.formularioPersona.reset({ activo: true });
     this.enviado = false;
     this.mensajeExito = '';
     this.mensajeError = '';
@@ -194,7 +200,7 @@ export class RegistroDocenteComponent {
   }
 
   campoInvalido(nombreCampo: string): boolean {
-    const campo = this.formularioDocente.get(nombreCampo);
+    const campo = this.formularioPersona.get(nombreCampo);
     return !!(campo && campo.invalid && (campo.dirty || campo.touched || this.enviado));
   }
 
@@ -229,7 +235,7 @@ export class RegistroDocenteComponent {
   abrirBuscador(): void {
     this.rutBusqueda = '';
     this.mensajeBusqueda = '';
-    this.docenteEncontrado = false;
+    this.personaEncontrada = false;
     this.modalBuscadorAbierto.set(true);
   }
 
@@ -241,34 +247,33 @@ export class RegistroDocenteComponent {
     this.modalBuscadorAbierto.set(false);
   }
 
-  buscarDocentePorRut(): void {
+  buscarPersonaPorRut(): void {
     if (!this.rutBusqueda) {
       return;
     }
 
     this.buscando = true;
     this.mensajeBusqueda = '';
-    this.docenteEncontrado = false;
+    this.personaEncontrada = false;
 
-    this.docenteService.buscarPorRut(this.rutBusqueda).subscribe({
-      next: (docente) => {
-        this.formularioDocente.patchValue(docente);
+    this.personaService.buscarPorRut(this.rutBusqueda).subscribe({
+      next: (persona: Persona) => {
+        this.formularioPersona.patchValue(persona);
 
-        // Activa el modo edición: al guardar, se hará un PUT, no un POST.
-        this.rutEnEdicion = docente.rut;
+        this.rutEnEdicion = persona.rut;
 
-        this.mensajeBusqueda = 'Docente encontrado. Datos cargados para edición.';
-        this.docenteEncontrado = true;
+        this.mensajeBusqueda = 'Persona encontrada. Datos cargados para edición.';
+        this.personaEncontrada = true;
         this.buscando = false;
 
         setTimeout(() => this.cerrarBuscador(), 800);
       },
-      error: (error) => {
+      error: (error: any) => {
         this.buscando = false;
-        this.docenteEncontrado = false;
+        this.personaEncontrada = false;
         this.mensajeBusqueda = error.status === 404
-          ? 'No se encontró un docente con ese RUT.'
-          : 'Error al buscar el docente.';
+          ? 'No se encontró una persona con ese RUT.'
+          : 'Error al buscar la persona.';
       }
     });
   }

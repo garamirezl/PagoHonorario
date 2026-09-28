@@ -45,13 +45,6 @@ export class ParametrizacionGlobalComponent {
       return;
     }
 
-    // Aquí luego se conecta al servicio real para cargar la parametrización existente:
-    // this.parametrizacionGlobalService.obtenerPorPeriodo(this.periodoSeleccionado)
-    //   .subscribe({
-    //     next: (data) => this.filas = data,
-    //     error: () => this.mostrarError('No se pudo cargar la parametrización.')
-    //   });
-
     this.filas = [];
   }
 
@@ -68,19 +61,6 @@ export class ParametrizacionGlobalComponent {
     }
 
     this.guardando = true;
-
-    // Aquí luego se conecta al servicio real:
-    // this.parametrizacionGlobalService.guardar(this.periodoSeleccionado, this.filas)
-    //   .subscribe({
-    //     next: () => {
-    //       this.guardando = false;
-    //       this.mostrarExito('Parametrización guardada correctamente.');
-    //     },
-    //     error: () => {
-    //       this.guardando = false;
-    //       this.mostrarError('Ocurrió un error al guardar la parametrización.');
-    //     }
-    //   });
 
     setTimeout(() => {
       this.guardando = false;

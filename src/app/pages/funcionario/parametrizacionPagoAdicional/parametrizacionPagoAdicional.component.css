@@ -110,8 +110,6 @@ button:disabled {
   color: #111827;
 }
 
-/* ===== Tabla ===== */
-
 .table-card {
   max-width: 1100px;
   margin: 0 auto;
@@ -216,8 +214,6 @@ button:disabled {
   font-size: 14px;
 }
 
-/* ===== Alert ===== */
-
 .alert {
   max-width: 1100px;
   margin: 18px auto 0 auto;
@@ -236,8 +232,6 @@ button:disabled {
   background: #fee2e2;
   color: #991b1b;
 }
-
-/* ===== Responsive ===== */
 
 @media (max-width: 768px) {
   .parametrizacion-page {

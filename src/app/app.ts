@@ -23,7 +23,7 @@ export class App {
 
   private readonly rutasSinLayout = ['/login'];
 
-  constructor(private router: Router) {
+  constructor(private router: Router){
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
@@ -46,7 +46,31 @@ export class App {
           name: 'Registro Docente',
           icon:
             '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-          path: '/registroDocente',
+          path: '/registroPersona',
+        },
+        {
+          name: 'Postulación Docente',
+          icon:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          path: '/postulacionDocente',
+        },
+        {
+          name: 'Selección Docente',
+          icon:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          path: '/seleccionDocente',
+        },
+        {
+          name: 'Curriculum Docente',
+          icon:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          path: '/curriculumDocente',
+        },
+        {
+          name: 'Administrador Persona',
+          icon:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 4l9 8M5 10v10h14V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+          path: '/administradorPersona',
         },
         {
           name: 'Carga Académica',

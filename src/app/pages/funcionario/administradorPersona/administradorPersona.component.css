@@ -1,0 +1,56 @@
+/* src/app/pages/administradorPersona/administradorPersona.component.css */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.tabla-personal {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-personal th,
+.tabla-personal td {
+  box-sizing: border-box;
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.tabla-personal th:last-child,
+.tabla-personal td.celda-checkbox {
+  width: 60px;
+  text-align: center;
+}
+
+.tabla-personal th {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabla-personal td {
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.tabla-personal tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 32px !important;
+  color: var(--text-muted);
+}
+
+.acciones-tabla {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}

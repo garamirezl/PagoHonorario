@@ -1,0 +1,11 @@
+/* src/app/pages/docente/curriculumDocente/titulosGrados/titulosGrados.component.css */
+
+.tab-content {
+  padding-top: 8px;
+}
+
+.tab-placeholder {
+  color: var(--text-muted, #9ca3af);
+  font-style: italic;
+  font-size: 14px;
+}

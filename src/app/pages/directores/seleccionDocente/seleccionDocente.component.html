@@ -1,0 +1,198 @@
+<!-- src/app/pages/funcionario/seleccionDocente/seleccionDocente.component.html -->
+
+<app-component-card
+  title="Selección Docente"
+  desc="Revise el avance de asignaturas y gestione las postulaciones docentes."
+>
+  <div class="filtro-fila">
+    <div class="form-group">
+      <app-select
+        id="periodoAcademico"
+        [options]="periodoOptions"
+        placeholder="Seleccione un período"
+        [(ngModel)]="periodoSeleccionado"
+        [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="onPeriodoChange()"
+      />
+    </div>
+  </div>
+
+  @if (periodoSeleccionado) {
+
+    <!-- Índices informativos -->
+<!-- Índices informativos -->
+<div class="info-fila">
+  <button
+    type="button"
+    class="info-card info-card-clicable"
+    [class.info-card-activa]="filtroActivo === 'todos'"
+    (click)="seleccionarFiltro('todos')"
+  >
+    <span class="info-label">Cursos Totales</span>
+    <span class="info-valor">{{ cursosTotales }}</span>
+  </button>
+
+  <button
+    type="button"
+    class="info-card info-card-clicable"
+    [class.info-card-activa]="filtroActivo === 'conDocente'"
+    (click)="seleccionarFiltro('conDocente')"
+  >
+    <span class="info-label">Cursos Con Docente</span>
+    <span class="info-valor">{{ cursosConDocente }}</span>
+  </button>
+
+  <button
+    type="button"
+    class="info-card info-card-clicable"
+    [class.info-card-activa]="filtroActivo === 'sinDocente'"
+    (click)="seleccionarFiltro('sinDocente')"
+  >
+    <span class="info-label">Cursos sin Docente</span>
+    <span class="info-valor">{{ cursosSinDocente }}</span>
+  </button>
+
+  <div class="info-card">
+    <span class="info-label">Avance</span>
+    <span class="info-valor">{{ porcentajeAvance }}%</span>
+    <div class="progreso-barra">
+      <div class="progreso-relleno" [style.width.%]="porcentajeAvance"></div>
+    </div>
+  </div>
+</div>
+
+    <!-- Tabla principal -->
+    <div class="table-wrapper">
+      <table class="tabla-asignaturas">
+        <thead>
+          <tr>
+            <th>Carrera/Departamento</th>
+            <th>Nombre asignatura</th>
+            <th>Cod. espec. ramo</th>
+            <th>Horas</th>
+            <th>Horario</th>
+            <th>Estado</th>
+            <th>Docentes postulados</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (asignatura of asignaturasFiltradas; track asignatura.id) {
+            <tr>
+              <td>{{ asignatura.carreraDepartamento }}</td>
+              <td>{{ asignatura.nombreAsignatura }}</td>
+              <td>{{ asignatura.codEspecRamo }}</td>
+              <td>{{ asignatura.horas }}</td>
+              <td>{{ asignatura.horario }}</td>
+              <td>
+                <app-badge variant="light" [color]="badgeColorEstado(asignatura.estado)">
+                  {{ asignatura.estado }}
+                </app-badge>
+              </td>
+              <td>
+                <app-button
+                  variant="outline"
+                  size="sm"
+                  (btnClick)="abrirModalDocentes(asignatura)"
+                >
+                  {{ asignatura.docentesPostulados.length }} docente{{ asignatura.docentesPostulados.length === 1 ? '' : 's' }}
+                </app-button>
+              </td>
+            </tr>
+          }
+
+          @if (asignaturas.length === 0) {
+            <tr>
+              <td colspan="7" class="sin-datos">No hay asignaturas registradas para este período.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (mensajeExito) {
+      <div class="mt-4">
+        <app-alert variant="success" title="Éxito" [message]="mensajeExito" />
+      </div>
+    }
+
+    @if (mensajeError) {
+      <div class="mt-4">
+        <app-alert variant="error" title="Error" [message]="mensajeError" />
+      </div>
+    }
+  }
+</app-component-card>
+
+<!-- Modal de docentes postulados -->
+<app-modal
+  [isOpen]="modalDocentesAbierto()"
+  (close)="cerrarModalDocentes()"
+  className="max-w-3xl p-6"
+>
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+      Docentes postulados
+    </h3>
+    <p class="text-sm text-gray-600 dark:text-gray-400">
+      {{ asignaturaSeleccionada?.nombreAsignatura }} — {{ asignaturaSeleccionada?.codEspecRamo }}
+    </p>
+
+    <div class="table-wrapper">
+      <table class="tabla-docentes-modal">
+        <thead>
+          <tr>
+            <th>Docente</th>
+            <th>Horas asignadas</th>
+            <th>Estado</th>
+            <th>Motivo</th>
+            <th>CV</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dp of asignaturaSeleccionada?.docentesPostulados; track dp.docente) {
+            <tr>
+              <td>{{ dp.docente }}</td>
+              <td>{{ dp.horasAsignadas }}</td>
+              <td>
+                <app-select
+                  [options]="estadoDocenteOptions"
+                  [(ngModel)]="dp.estado"
+                  [ngModelOptions]="{standalone: true}"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="input-motivo"
+                  [(ngModel)]="dp.motivo"
+                  [ngModelOptions]="{standalone: true}"
+                  placeholder="Ingrese motivo (opcional)"
+                />
+              </td>
+              <td>
+                <app-button variant="outline" size="sm" (btnClick)="verCV(dp.cvUrl)">
+                  Ver
+                </app-button>
+              </td>
+            </tr>
+          }
+
+          @if (!asignaturaSeleccionada?.docentesPostulados?.length) {
+            <tr>
+              <td colspan="5" class="sin-datos">No hay docentes postulados para esta asignatura.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2">
+      <app-button variant="outline" [disabled]="guardandoModal" (btnClick)="cerrarModalDocentes()">
+        Cerrar
+      </app-button>
+      <app-button variant="primary" [disabled]="guardandoModal" (btnClick)="guardarCambiosModal()">
+        {{ guardandoModal ? 'Guardando...' : 'Guardar' }}
+      </app-button>
+    </div>
+  </div>
+</app-modal>

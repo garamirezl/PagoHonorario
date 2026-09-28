@@ -1,0 +1,155 @@
+/* src/app/pages/docente/postulacionDocente/postulacionDocente.component.css */
+
+.filtro-fila {
+  max-width: 340px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Info cards ===== */
+
+.info-fila {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.info-card {
+  flex: 1;
+  min-width: 200px;
+  background: var(--bg-hover);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-card-alerta {
+  background: var(--error-bg);
+}
+
+.info-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.info-valor {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+/* ===== Section title ===== */
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 20px 0 12px 0;
+}
+
+/* ===== Buscador ===== */
+
+.buscador-fila {
+  max-width: 420px;
+  margin-bottom: 14px;
+}
+
+/* ===== Tablas ===== */
+
+/* ===== Tablas ===== */
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+}
+
+.tabla-busqueda,
+.tabla-seleccion {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-busqueda th,
+.tabla-busqueda td,
+.tabla-seleccion th,
+.tabla-seleccion td {
+  box-sizing: border-box;
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-subtle, #f1f3f5);
+}
+
+.tabla-busqueda th,
+.tabla-seleccion th {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid var(--border-color, #e5e7eb);
+  background: var(--bg-hover, #f9fafb);
+}
+
+.tabla-busqueda td,
+.tabla-seleccion td {
+  color: var(--text-primary, #1f2937);
+}
+
+.tabla-busqueda tbody tr:last-child td,
+.tabla-seleccion tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-busqueda tbody tr:hover,
+.tabla-seleccion tbody tr:hover {
+  background: var(--bg-hover, #f9fafb);
+}
+
+.celda-accion {
+  width: 48px;
+  text-align: center;
+}
+
+.btn-eliminar-fila {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.btn-eliminar-fila:hover {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 28px !important;
+  color: var(--text-muted);
+}
+
+.acciones-tabla {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}

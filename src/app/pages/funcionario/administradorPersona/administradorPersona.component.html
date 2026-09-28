@@ -1,0 +1,75 @@
+<!-- src/app/pages/administradorPersona/administradorPersona.component.html -->
+
+<app-component-card
+  title="Administrador de Personal"
+  desc="Gestione el perfil y estado de docentes, funcionarios y directores."
+>
+  <div class="table-wrapper">
+    <table class="tabla-personal">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido paterno</th>
+          <th>Apellido materno</th>
+          <th>Perfil</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (fila of personal; track fila.id) {
+          <tr>
+            <td>{{ fila.nombre }}</td>
+            <td>{{ fila.apellidoPaterno }}</td>
+            <td>{{ fila.apellidoMaterno }}</td>
+            <td>
+              <app-select
+                [options]="perfilOptions"
+                [(ngModel)]="fila.perfil"
+                [ngModelOptions]="{standalone: true}"
+              />
+            </td>
+            <td>
+              <app-select
+                [options]="estadoOptions"
+                [(ngModel)]="fila.estado"
+                [ngModelOptions]="{standalone: true}"
+              />
+            </td>
+            <td class="celda-checkbox">
+              <app-checkbox
+                [(ngModel)]="fila.seleccionado"
+                [ngModelOptions]="{standalone: true}"
+              />
+            </td>
+          </tr>
+        }
+
+        @if (personal.length === 0) {
+          <tr>
+            <td colspan="6" class="sin-datos">No hay personal registrado.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="acciones-tabla">
+    <app-button
+      variant="primary"
+      [disabled]="guardando"
+      (btnClick)="guardarCambios()"
+    >
+      {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+    </app-button>
+  </div>
+
+  @if (mensajeExito) {
+    <app-alert variant="success" title="Éxito" [message]="mensajeExito" />
+  }
+
+  @if (mensajeError) {
+    <app-alert variant="error" title="Error" [message]="mensajeError" />
+  }
+</app-component-card>

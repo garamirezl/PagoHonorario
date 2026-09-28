@@ -38,7 +38,7 @@ export class SignIn {
       this.cargando = false;
 
       if (this.usuario === this.USUARIO_VALIDO && this.password === this.PASSWORD_VALIDA) {
-        this.router.navigate(['/registroDocente']);
+        this.router.navigate(['/registroPersona']);
       } else {
         this.mensajeError = 'Usuario o contraseña incorrectos.';
       }

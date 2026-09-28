@@ -1,0 +1,168 @@
+<!-- src/app/pages/docente/postulacionDocente/postulacionDocente.component.html -->
+
+<app-component-card
+  title="Postulación Docente"
+  desc="Seleccione el período académico y postule a los cursos disponibles."
+>
+  <div class="filtro-fila">
+    <div class="form-group">
+      <app-select
+        id="periodoAcademico"
+        [options]="periodoOptions"
+        placeholder="Seleccione un período"
+        [(ngModel)]="periodoSeleccionado"
+        [ngModelOptions]="{standalone: true}"
+        (ngModelChange)="onPeriodoChange()"
+      />
+    </div>
+  </div>
+
+  @if (periodoSeleccionado) {
+
+    <!-- Textos informativos -->
+    <div class="info-fila">
+      <div class="info-card">
+        <span class="info-label">Horas por Contrato:</span>
+        <span class="info-valor">{{ horasPorContrato }}</span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Horas postuladas:</span>
+        <span class="info-valor">{{ horasPostuladas }}</span>
+      </div>
+      <div class="info-card" [class.info-card-alerta]="horasPendientes < 0">
+        <span class="info-label">Horas Pendientes:</span>
+        <span class="info-valor">{{ horasPendientes }}</span>
+      </div>
+    </div>
+
+    <!-- Buscador de clases -->
+    <h3 class="section-title">Buscar clases</h3>
+    <div class="buscador-fila">
+      <app-input-field
+        id="busquedaClase"
+        type="text"
+        placeholder="Escriba el nombre de la clase para buscar..."
+        [(ngModel)]="busquedaClase"
+        [ngModelOptions]="{standalone: true}"
+      />
+    </div>
+
+    <div class="table-wrapper">
+      <table class="tabla-busqueda">
+        <thead>
+          <tr>
+            <th>Sección</th>
+            <th>Nombre clase</th>
+            <th>Horario (Días / Horas)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (clase of resultadosBusqueda; track clase.seccion + clase.nombreClase) {
+            <tr>
+              <td>{{ clase.seccion }}</td>
+              <td>{{ clase.nombreClase }}</td>
+              <td>{{ clase.horario }}</td>
+              <td class="celda-accion">
+                <app-button variant="outline" size="sm" (btnClick)="agregarCurso(clase)">
+                  Agregar
+                </app-button>
+              </td>
+            </tr>
+          }
+
+          @if (busquedaClase.trim() && resultadosBusqueda.length === 0) {
+            <tr>
+              <td colspan="4" class="sin-datos">No se encontraron clases para "{{ busquedaClase }}".</td>
+            </tr>
+          }
+
+          @if (!busquedaClase.trim()) {
+            <tr>
+              <td colspan="4" class="sin-datos">Escriba el nombre de una clase para buscar.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Cursos seleccionados -->
+    <h3 class="section-title">Cursos seleccionados</h3>
+    <div class="table-wrapper">
+      <table class="tabla-seleccion">
+        <thead>
+          <tr>
+            <th>Depto/Facultad</th>
+            <th>Sección</th>
+            <th>Nombre clase</th>
+            <th>Jornada</th>
+            <th>Horario</th>
+            <th>N° Horas</th>
+            <th>Estado</th>
+            <th>Motivo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (curso of postulaciones; track curso.seccion + curso.nombreClase; let i = $index) {
+            <tr>
+              <td>{{ curso.departamento }}</td>
+              <td>{{ curso.seccion }}</td>
+              <td>{{ curso.nombreClase }}</td>
+              <td>{{ curso.jornada }}</td>
+              <td>{{ curso.horario }}</td>
+              <td>{{ curso.horas }}</td>
+              <td>
+                <app-badge variant="light" [color]="badgeColor(curso.estado)">
+                  {{ curso.estado }}
+                </app-badge>
+              </td>
+              <td>{{ curso.motivo || '—' }}</td>
+              <td class="celda-accion">
+                <button
+                  type="button"
+                  class="btn-eliminar-fila"
+                  (click)="eliminarCurso(i)"
+                  title="Eliminar curso"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+
+          @if (postulaciones.length === 0) {
+            <tr>
+              <td colspan="9" class="sin-datos">No ha agregado cursos a su postulación.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="acciones-tabla">
+      <app-button
+        variant="primary"
+        [disabled]="guardando"
+        (btnClick)="guardarPostulacion()"
+      >
+        {{ guardando ? 'Guardando...' : 'Guardar' }}
+      </app-button>
+    </div>
+
+    @if (mensajeExito) {
+      <div class="mt-4">
+        <app-alert variant="success" title="Éxito" [message]="mensajeExito" />
+      </div>
+    }
+
+    @if (mensajeError) {
+      <div class="mt-4">
+        <app-alert variant="error" title="Error" [message]="mensajeError" />
+      </div>
+    }
+  }
+</app-component-card>

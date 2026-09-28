@@ -1,0 +1,152 @@
+/* src/app/pages/funcionario/seleccionDocente/seleccionDocente.component.css */
+
+.filtro-fila {
+  max-width: 340px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Info cards ===== */
+
+.info-fila {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.info-card {
+  flex: 1;
+  min-width: 180px;
+  background: var(--bg-hover, #f9fafb);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-card-clicable {
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-align: left;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+
+.info-card-clicable:hover {
+  transform: translateY(-1px);
+}
+
+.info-card-activa {
+  border-color: var(--brand, #2563eb);
+}
+
+.info-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary, #6b7280);
+}
+
+.info-valor {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-heading, #111827);
+}
+
+.progreso-barra {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-color, #e5e7eb);
+  overflow: hidden;
+}
+
+.progreso-relleno {
+  height: 100%;
+  background: var(--brand, #2563eb);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* ===== Tablas ===== */
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+}
+
+.tabla-asignaturas,
+.tabla-docentes-modal {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-asignaturas th,
+.tabla-asignaturas td,
+.tabla-docentes-modal th,
+.tabla-docentes-modal td {
+  box-sizing: border-box;
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-subtle, #f1f3f5);
+}
+
+.tabla-asignaturas th,
+.tabla-docentes-modal th {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid var(--border-color, #e5e7eb);
+  background: var(--bg-hover, #f9fafb);
+}
+
+.tabla-asignaturas td,
+.tabla-docentes-modal td {
+  color: var(--text-primary, #1f2937);
+}
+
+.tabla-asignaturas tbody tr:last-child td,
+.tabla-docentes-modal tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-asignaturas tbody tr:hover,
+.tabla-docentes-modal tbody tr:hover {
+  background: var(--bg-hover, #f9fafb);
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 28px !important;
+  color: var(--text-muted, #9ca3af);
+}
+
+.input-motivo {
+  width: 100%;
+  height: 38px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-input, #d1d5db);
+  border-radius: 8px;
+  background: var(--bg-input, #ffffff);
+  color: var(--text-primary, #1f2937);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-motivo:focus {
+  border-color: var(--brand, #2563eb);
+  box-shadow: 0 0 0 3px var(--brand-focus-ring, rgba(37, 99, 235, 0.16));
+}

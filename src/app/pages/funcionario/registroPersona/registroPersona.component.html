@@ -1,16 +1,28 @@
-<!-- src/app/pages/funcionario/registroDocente/registroDocente.component.html -->
+<!-- src/app/pages/funcionario/registroPersona/registroPersona.component.html -->
 
 <app-component-card
-  title="Registro Docente"
-  desc="Ingreso de información personal, académica y laboral del docente."
+  title="Registro Persona"
+  desc="Ingreso de información personal, académica y laboral."
   [headerAction]="actionBtn"
 >
-  <form [formGroup]="formularioDocente" (ngSubmit)="guardarDocente()">
+  <form [formGroup]="formularioPersona" (ngSubmit)="guardarPersona()">
 
     <h3 class="text-base font-semibold text-gray-800 dark:text-white/90 mb-4">
       Datos personales
     </h3>
     <div class="form-grid">
+      <div>
+        <app-label for="perfil">Perfil</app-label>
+        <app-select
+          id="perfil"
+          [options]="perfilOptions"
+          placeholder="Seleccione perfil"
+          formControlName="perfil"
+          [error]="campoInvalido('perfil')"
+          [hint]="campoInvalido('perfil') ? 'Seleccione un perfil.' : null"
+        />
+      </div>
+
       <div>
         <app-label for="rut">RUT</app-label>
         <app-input-field
@@ -228,7 +240,7 @@
       </div>
 
       <div class="checkbox-group">
-        <app-checkbox id="activo" label="Docente activo" formControlName="activo" />
+        <app-checkbox id="activo" label="Persona activa" formControlName="activo" />
       </div>
     </div>
 
@@ -249,7 +261,7 @@
         Limpiar
       </app-button>
       <app-button variant="primary" type="submit" [disabled]="cargando">
-        {{ cargando ? 'Guardando...' : 'Guardar docente' }}
+        {{ cargando ? 'Guardando...' : 'Guardar' }}
       </app-button>
     </div>
   </form>
@@ -275,9 +287,9 @@
   className="max-w-md p-6"
 >
   <div class="space-y-4">
-    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Buscar docente</h3>
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Buscar persona</h3>
     <p class="text-sm text-gray-600 dark:text-gray-400">
-      Ingrese el RUT del docente para cargar sus datos automáticamente.
+      Ingrese el RUT para cargar sus datos automáticamente.
     </p>
 
     <div>
@@ -295,7 +307,7 @@
 
     @if (mensajeBusqueda) {
       <app-alert
-        [variant]="docenteEncontrado ? 'success' : 'error'"
+        [variant]="personaEncontrada ? 'success' : 'error'"
         [message]="mensajeBusqueda"
       />
     }
@@ -308,7 +320,7 @@
         size="sm"
         type="button"
         [disabled]="buscando || !rutBusqueda"
-        (btnClick)="buscarDocentePorRut()"
+        (btnClick)="buscarPersonaPorRut()"
       >
         {{ buscando ? 'Buscando...' : 'Buscar' }}
       </app-button>
